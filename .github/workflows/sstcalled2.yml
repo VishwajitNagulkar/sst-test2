@@ -40,11 +40,11 @@ jobs:
           role-duration-seconds: 900
           role-skip-session-tagging: true
 
-      - name: Install dependencies (npm install)
-        run: npm install
+      - name: Install dependencies (yarn install)
+        run: yarn install
           
-      - name: Install dependencies (npm ci)
-        run: npm ci
+      - name: Install dependencies (yarn ci)
+        run: yarn ci
               
       - name: Deploy SST App
         if: ${{ (github.event.action == 'labeled' && github.event.label.name == 'deploy' && inputs.app-env == 'preview') || ( github.event.pull_request.merged == true && (inputs.app-env == 'prod' || inputs.app-env == 'stage')) }}
