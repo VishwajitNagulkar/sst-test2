@@ -1,4 +1,4 @@
-name: Shared workflow- SST APP
+name: Shared workflow- SST APP 
 
 on:
   workflow_call:
