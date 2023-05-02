@@ -1,4 +1,4 @@
-name: workflow_dispatch- SST APP
+name: workflow_dispatch- SST APP 
 permissions:
   actions: read
   contents: read
