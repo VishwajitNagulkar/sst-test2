@@ -23,7 +23,7 @@ jobs:
 
   call-workflow-stage:
     if: ${{ github.base_ref == 'stage' }}
-    uses: clouddrove-sandbox/test-environment-sst-2/.github/workflows/sst_called_test28.yml@master
+    uses: VishwajitNagulkar/sst-test2/.github/workflows/sstcalled2.yml@master
     with:
       app-env: stage                      
       working-directory: './floaws/my-sst-app'      ## specify your working folder from repo
@@ -32,7 +32,7 @@ jobs:
 
   call-workflow-prod:
     if: ${{ github.base_ref == 'master' }}
-    uses: clouddrove-sandbox/test-environment-sst-2/.github/workflows/sst_called_test28.yml@master
+    uses: VishwajitNagulkar/sst-test2/.github/workflows/sstcalled2.yml@master
     with:
       app-env: prod
       working-directory: './floaws/my-sst-app'      ## specify your working folder from repo
