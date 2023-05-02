@@ -14,7 +14,7 @@ on:
   workflow_dispatch:
 jobs:
   call-workflow-preview:
-    uses: clouddrove-sandbox/test-environment-sst-2/.github/workflows/sst_called_test28.yml@master
+    uses: VishwajitNagulkar/sst-test2/.github/workflows/sstcalled2.yml@master
     with:
       app-env: preview                  
       working-directory: './floaws/my-sst-app'      ## specify your working folder from repo
