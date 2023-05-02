@@ -1,0 +1,55 @@
+name: Shared workflow- SST APP
+
+on:
+  workflow_call:
+    inputs:
+      app-env:
+        description: 'Application environment' 
+        required: false
+        type: string
+      working-directory:
+        description: 'working directory in repo'
+        required: true
+        type: string
+      
+    secrets:
+      ACCOUNT:
+        description: 'account id'
+        required: true
+
+jobs:
+  SST-APP: 
+    runs-on:
+      - self-hosted
+      - 'flo-${{ inputs.app-env }}'
+    defaults:
+      run:
+        working-directory: ${{ inputs.working-directory }}
+
+    name: Deploy SST APP   
+    steps:
+      - name: Checkout git repo
+        uses: actions/checkout@v3
+
+      - name: Configure AWS Creds via role 
+        uses: aws-actions/configure-aws-credentials@v1-node16
+        with:
+          aws-region: us-west-2
+          # role-to-assume: arn:aws:iam::${{ secrets.ACCOUNT }}:role/github-actions-deploy-role
+          role-to-assume: arn:aws:iam::${{ secrets.ACCOUNT }}:role/switch-role
+          role-duration-seconds: 900
+          role-skip-session-tagging: true
+
+      - name: Install dependencies (npm install)
+        run: npm install
+          
+      - name: Install dependencies (npm ci)
+        run: npm ci
+              
+      - name: Deploy SST App
+        if: ${{ (github.event.action == 'labeled' && github.event.label.name == 'deploy' && inputs.app-env == 'preview') || ( github.event.pull_request.merged == true && (inputs.app-env == 'prod' || inputs.app-env == 'stage')) }}
+        run: npx sst deploy --stage ${{ inputs.app-env }}
+
+      - name: Destroy SST App 
+        if: ${{ ( github.event.action == 'labeled' && github.event.label.name == 'destroy' && inputs.app-env == 'preview' ) || (github.event.action == 'closed' && inputs.app-env == 'preview' || github.event.pull_request.merged == true && inputs.app-env == 'preview') }}
+        run: npx sst remove --stage ${{ inputs.app-env }}
